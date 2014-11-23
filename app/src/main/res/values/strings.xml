@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DLUT登录助手</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">设置</string>
+    <string name="manual">手动尝试登录</string>
+    <string name="action_about">关于作者</string>
+    <string name="loginok">已连接并登录成功</string>
+    <string name="loginfail">未登录</string>
+    <string name="tip">手动登录适合在自动登录出错情况下再次尝试</string>
+    <string name="aboutme">Copyright 2014 by 易木\nlinweizh@qq.com \nhttps://github.com/yimun</string>
+
+</resources>
