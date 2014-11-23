@@ -50,9 +50,10 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:text="@string/loginok"
+        android:text="@string/loginfail"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/holo_green_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:singleLine="true" />
 
     <RelativeLayout
         android:layout_width="wrap_content"

@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class MyService extends Service {
 
-    public static boolean isLogin;
+    public static boolean isLogin = false;
 
 	public Handler handler = new Handler() {
 		@Override
