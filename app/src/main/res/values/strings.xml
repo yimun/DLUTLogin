@@ -10,5 +10,6 @@
     <string name="loginfail">未登录</string>
     <string name="tip">手动登录适合在自动登录出错情况下再次尝试</string>
     <string name="aboutme">Copyright 2014 by 易木\nlinweizh@qq.com \nhttps://github.com/yimun</string>
+    <string name="warn">请不要使用安全软件，如LBE,360等禁止此软件的后台自启，否则助手将无法响应wifi变化并自动登录</string>
 
 </resources>

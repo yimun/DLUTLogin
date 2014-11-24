@@ -8,6 +8,7 @@ import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.Parcelable;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * 网络状态改变时接收广播并启动主服务
@@ -32,21 +33,18 @@ public class WifiReceiver extends BroadcastReceiver {
                     WifiAdmin wifiAdmin = new WifiAdmin(ctx);
                     String ssidName = wifiAdmin.getSSID();
                     Log.i("receiver connect to:", ssidName);
+                    boolean isSaved = SpUtil.getSp(ctx).getBoolean("isSaved",false);
                     // 判断是否连接了DLUT
-                    if (ssidName != null && ssidName.equalsIgnoreCase(WIFI_SSID) && MyService.isLogin == false) {
+                    if (isSaved && ssidName.contains(WIFI_SSID) && SpUtil.getLoginState(ctx) == false) {
+                        Toast.makeText(ctx,"连接DLUT中...",Toast.LENGTH_SHORT).show();
                         ctx.startService(new Intent(ctx, MyService.class));
 
                     }
                 } else if (state == State.DISCONNECTED) {
-                    MyService.isLogin = false;
+                    SpUtil.setLoginState(ctx,false);
                     ctx.sendBroadcast(new Intent(UiReceiver.ACTION_UPDATE_UI));
                 }
-
             }
-
         }
-
-
     }
-
 }

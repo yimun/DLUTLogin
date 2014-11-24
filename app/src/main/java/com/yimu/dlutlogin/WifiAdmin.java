@@ -147,11 +147,11 @@ public class WifiAdmin {
 	public String getSSID() {
 		
 		mWifiInfo = mWifiManager.getConnectionInfo();
-		if(mWifiInfo.getSSID()==null){
-			Log.i("test", "mWifiInfo.getSSID()==null");
-			return "NULL";
+		if(mWifiInfo == null || mWifiInfo.getSSID() == null){
+			Log.i("WifiAdmin", "ssid null");
+            return "NULL";
 		}
-		return (mWifiInfo == null) ? "NULL" : mWifiInfo.getSSID();
+		return mWifiInfo.getSSID();
 	}
 
 	// 得到IP地址

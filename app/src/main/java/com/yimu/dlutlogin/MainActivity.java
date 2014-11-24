@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +66,7 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sp = this.getSharedPreferences("dlutlogin_pref", 0);
+        SharedPreferences sp = SpUtil.getSp(this);
         boolean isSaved = sp.getBoolean("isSaved", false);
         if (!isSaved)
             return;
@@ -80,7 +81,7 @@ public class MainActivity extends Activity implements OnClickListener {
         pgProgressbar.setVisibility(View.GONE);
         btnManual.setEnabled(true);
         btnManual.setText(getResources().getString(R.string.manual));
-        if (MyService.isLogin) {
+        if (SpUtil.getLoginState(this)) {
             tvLoginstatus.setText(getResources().getString(R.string.loginok));
             tvLoginstatus.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
 
@@ -107,6 +108,7 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.action_settings:
                 if(cnt++ > 3)
                     Toast.makeText(this,"Sorry 设置里其实没东西 hiahiahia",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this,SettingsActivity.class));
                 break;
         }
         return super.onMenuItemSelected(i, menuItem);
@@ -126,7 +128,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View arg0) {
-        SharedPreferences sp = getSharedPreferences("dlutlogin_pref", 0);
+        SharedPreferences sp = SpUtil.getSp(this);
         switch (arg0.getId()) {
             case R.id.save: {
                 String strUname = tvUsername.getText().toString();
@@ -149,7 +151,8 @@ public class MainActivity extends Activity implements OnClickListener {
                     return;
                 }
                 String ssid = new WifiAdmin(this).getSSID();
-                if(ssid.equals("NULL") || !ssid.equals(WifiReceiver.WIFI_SSID)){
+                Log.i("MainActivity",ssid);
+                if(!ssid.contains(WifiReceiver.WIFI_SSID)){
                     Toast.makeText(this, "先连接至DLUT方可登录", Toast.LENGTH_SHORT).show();
                     return;
                 }

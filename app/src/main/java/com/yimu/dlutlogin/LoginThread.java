@@ -32,22 +32,24 @@ public class LoginThread extends Thread implements Runnable {
 	public void run() {
 		super.run();
 		HttpPost httpRequest = new HttpPost(loginUrl);
+        String result = null;
 		try {
 			httpRequest.setEntity(new UrlEncodedFormEntity(buildParams(), HTTP.UTF_8)); 
 			HttpResponse httpResponse = new DefaultHttpClient()
 					.execute(httpRequest);
 			if (httpResponse.getStatusLine().getStatusCode() == 200) {
-				String result = EntityUtils.toString(httpResponse.getEntity());
-				Message msg = new Message();
-				msg.obj = result;
-				((MyService)context).handler.sendMessage(msg);
-				Log.i("LoginThread",result);
+				result = EntityUtils.toString(httpResponse.getEntity());
 			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+        Message msg = new Message();
+        msg.obj = result;
+        ((MyService)context).handler.sendMessage(msg);
+        if(null != result)
+            Log.i("LoginThread",result);
 	}
 	
 	private List<NameValuePair> buildParams(){
@@ -61,7 +63,7 @@ public class LoginThread extends Thread implements Runnable {
 		params.add(new BasicNameValuePair("is_debug", "1"));
 		params.add(new BasicNameValuePair("uid", "-1"));
 		params.add(new BasicNameValuePair("is_pad", "1"));
-		params.add(new BasicNameValuePair("force", "1"));
+		params.add(new BasicNameValuePair("force", "0"));
 		params.add(new BasicNameValuePair("type", "1"));
 		params.add(new BasicNameValuePair("ac_id", "1"));
 		params.add(new BasicNameValuePair("pop", "0"));

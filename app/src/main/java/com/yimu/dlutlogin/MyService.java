@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 public class MyService extends Service {
 
-    public static boolean isLogin = false;
 
 	public Handler handler = new Handler() {
 		@Override
@@ -23,9 +22,12 @@ public class MyService extends Service {
 			super.handleMessage(arg0);
 			String result = (String) arg0.obj;
             if(result != null && result.contains("登录成功")) {
-                isLogin = true;
-                Toast.makeText(MyService.this, "DLUT:登录成功,开始上网", Toast.LENGTH_LONG).show();
-               // showNotif();
+                SpUtil.setLoginState(MyService.this,true);
+                if(SpUtil.getSp(MyService.this).getBoolean("cb_isNotify",false)) {
+                    showNotif();
+                }else {
+                    Toast.makeText(MyService.this, "DLUT:登录成功,开始上网", Toast.LENGTH_LONG).show();
+                }
             }else if(result != null && result.contains("登录失败")){
                 Toast.makeText(MyService.this, "DLUT:用户名或密码有错误", Toast.LENGTH_SHORT).show();
             }else{
@@ -48,7 +50,7 @@ public class MyService extends Service {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-        isLogin = false; // 重置登录的状态
+        SpUtil.setLoginState(MyService.this,false); // 重置登录的状态
 		Log.i("MyService", "onCreate");
         new LoginThread(this).start();
 	}
@@ -72,7 +74,7 @@ public class MyService extends Service {
 
 	public void showNotif() {
 
-        String uname = this.getSharedPreferences("dlutlogin_pref", 0).getString("username","");
+        String uname = SpUtil.getSp(this).getString("username", "");
 		// 定义通知栏展现的内容信息
 		CharSequence title, contentTitle, contentText;
 		title = "登录成功";
