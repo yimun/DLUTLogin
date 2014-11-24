@@ -23,7 +23,7 @@ public class MyService extends Service {
 			String result = (String) arg0.obj;
             if(result != null && result.contains("登录成功")) {
                 SpUtil.setLoginState(MyService.this,true);
-                if(SpUtil.getSp(MyService.this).getBoolean("cb_isNotify",false)) {
+                if(SpUtil.getSp(MyService.this).getBoolean("cb_isNotify",true)) {
                     showNotif();
                 }else {
                     Toast.makeText(MyService.this, "DLUT:登录成功,开始上网", Toast.LENGTH_LONG).show();

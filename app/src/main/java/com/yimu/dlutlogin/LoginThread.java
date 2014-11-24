@@ -21,59 +21,62 @@ import android.os.Message;
 import android.util.Log;
 
 public class LoginThread extends Thread implements Runnable {
-	
-	private Context context;
+
+    private Context context;
     private String loginUrl = "http://w.dlut.edu.cn/cgi-bin/srun_portal";
-	public LoginThread(Context con){
-		this.context = con;
-	}
-	
-	@Override
-	public void run() {
-		super.run();
-		HttpPost httpRequest = new HttpPost(loginUrl);
+
+    public LoginThread(Context con) {
+        this.context = con;
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        HttpPost httpRequest = new HttpPost(loginUrl);
         String result = null;
-		try {
-			httpRequest.setEntity(new UrlEncodedFormEntity(buildParams(), HTTP.UTF_8)); 
-			HttpResponse httpResponse = new DefaultHttpClient()
-					.execute(httpRequest);
-			if (httpResponse.getStatusLine().getStatusCode() == 200) {
-				result = EntityUtils.toString(httpResponse.getEntity());
-			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        try {
+            List<NameValuePair> params = buildParams();
+            if (null != params) {
+                httpRequest.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+                HttpResponse httpResponse = new DefaultHttpClient()
+                        .execute(httpRequest);
+                if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                    result = EntityUtils.toString(httpResponse.getEntity());
+                }
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Message msg = new Message();
         msg.obj = result;
-        ((MyService)context).handler.sendMessage(msg);
-        if(null != result)
-            Log.i("LoginThread",result);
-	}
-	
-	private List<NameValuePair> buildParams(){
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		SharedPreferences sp = context.getSharedPreferences("dlutlogin_pref", 0);
-		boolean isSaved = sp.getBoolean("isSaved", false);
-		if(!isSaved)
-			return null;
-		params.add(new BasicNameValuePair("username", sp.getString("username", "")));
-		params.add(new BasicNameValuePair("password", sp.getString("password", "")));
-		params.add(new BasicNameValuePair("is_debug", "1"));
-		params.add(new BasicNameValuePair("uid", "-1"));
-		params.add(new BasicNameValuePair("is_pad", "1"));
-		params.add(new BasicNameValuePair("force", "0"));
-		params.add(new BasicNameValuePair("type", "1"));
-		params.add(new BasicNameValuePair("ac_id", "1"));
-		params.add(new BasicNameValuePair("pop", "0"));
-		params.add(new BasicNameValuePair("ac_type", "h3c"));
-		params.add(new BasicNameValuePair("gateway_auth", "0"));
-		params.add(new BasicNameValuePair("local_auth", "1"));
-		params.add(new BasicNameValuePair("is_ldap", "0"));
-		return params;
-	}
-	
-	
+        ((MyService) context).handler.sendMessage(msg);
+        if (null != result)
+            Log.i("LoginThread", result);
+    }
+
+    private List<NameValuePair> buildParams() {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        SharedPreferences sp = SpUtil.getSp(context);
+        boolean isSaved = sp.getBoolean("isSaved", false);
+        if (!isSaved)
+            return null;
+        params.add(new BasicNameValuePair("username", sp.getString("username", "")));
+        params.add(new BasicNameValuePair("password", sp.getString("password", "")));
+        params.add(new BasicNameValuePair("is_debug", "1"));
+        params.add(new BasicNameValuePair("uid", "-1"));
+        params.add(new BasicNameValuePair("is_pad", "1"));
+        params.add(new BasicNameValuePair("force", "0"));
+        params.add(new BasicNameValuePair("type", "1"));
+        params.add(new BasicNameValuePair("ac_id", "1"));
+        params.add(new BasicNameValuePair("pop", "0"));
+        params.add(new BasicNameValuePair("ac_type", "h3c"));
+        params.add(new BasicNameValuePair("gateway_auth", "0"));
+        params.add(new BasicNameValuePair("local_auth", "1"));
+        params.add(new BasicNameValuePair("is_ldap", "0"));
+        return params;
+    }
+
 
 }
