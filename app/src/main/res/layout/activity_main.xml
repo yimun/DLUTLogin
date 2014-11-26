@@ -1,7 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:scrollbarSize="0dip"
     android:scrollbars="none"
     tools:context="com.yimu.dlutlogin.MainActivity">
 
@@ -16,7 +17,7 @@
 
         <EditText
             android:id="@+id/mailname"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -31,7 +32,7 @@
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/mailname"
             android:layout_centerHorizontal="true"
@@ -47,6 +48,7 @@
             android:layout_below="@+id/password"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="42dp"
+
             android:text="保存帐号密码" />
 
         <TextView

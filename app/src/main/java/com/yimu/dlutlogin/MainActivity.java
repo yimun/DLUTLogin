@@ -1,6 +1,7 @@
 package com.yimu.dlutlogin;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -16,6 +17,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import java.lang.reflect.Field;
 
@@ -34,6 +39,7 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initUmeng();
         setContentView(R.layout.activity_main);
         btnSave = (Button) findViewById(R.id.save);
         btnManual = (Button) findViewById(R.id.manual);
@@ -66,6 +72,7 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         SharedPreferences sp = SpUtil.getSp(this);
         boolean isSaved = sp.getBoolean("isSaved", false);
         if (!isSaved)
@@ -103,11 +110,14 @@ public class MainActivity extends Activity implements OnClickListener {
     public boolean onMenuItemSelected(int i, MenuItem menuItem) {
         switch(menuItem.getItemId()){
             case R.id.action_about:
-                Toast.makeText(this,getResources().getString(R.string.aboutme),Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this)
+                        .setTitle(getResources().getString(R.string.title))
+                        .setMessage(getResources().getString(R.string.aboutme))
+                        .setPositiveButton("确定",null).show();
                 break;
             case R.id.action_settings:
-                if(cnt++ > 3)
-                    Toast.makeText(this,"Sorry 设置里其实没东西 hiahiahia",Toast.LENGTH_SHORT).show();
+               /* if(cnt++ > 3)
+                    Toast.makeText(this,"Sorry 设置里其实没东西 hiahiahia",Toast.LENGTH_SHORT).show();*/
                 startActivity(new Intent(this,SettingsActivity.class));
                 break;
         }
@@ -169,11 +179,22 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         this.unregisterReceiver(mUiReceiver);
+    }
+
+    private void initUmeng() {
+        // 友盟自动检测更新
+        if(SpUtil.getSp(this).getBoolean("auto_update",false)){
+            UmengUpdateAgent.setUpdateOnlyWifi(false);
+            UmengUpdateAgent.update(this);
+        }
+        FeedbackAgent agent = new FeedbackAgent(this);
+        agent.sync();
     }
 }

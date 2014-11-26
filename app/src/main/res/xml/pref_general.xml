@@ -6,6 +6,17 @@
         android:summary="取消后将不在通知栏显示登录成功信息"
         android:defaultValue="true" />
 
+    <PreferenceScreen
+        android:key="feedback"
+        android:title="反馈"
+        android:summary="有什么建议或者意见给开发者" >
+        <intent
+            android:targetPackage="com.yimu.dlutlogin"
+            android:targetClass="com.umeng.fb.ConversationActivity" />
+    </PreferenceScreen>
+
+
+
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <!--<EditTextPreference
